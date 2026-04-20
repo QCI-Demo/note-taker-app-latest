@@ -1,24 +1,38 @@
 describe("Edit note inline", () => {
-  it("saves edited title and restores on cancel", () => {
+  beforeEach(() => {
     cy.visit("/");
+  });
 
-    cy.contains("li", "Welcome").within(() => {
-      cy.get('[data-testid="edit-note-seed-note-1"]').click();
-    });
+  it("saves edited title and restores on cancel", () => {
+    cy.get('[data-testid="add-note-button"]').click();
+    const originalTitle = "Note to edit";
+    cy.get("#create-note-title").clear().type(originalTitle);
+    cy.get("#create-note-body").clear().type("Body.");
+    cy.get('[data-testid="create-note-submit"]').click();
+
+    cy.contains('[data-testid="note-list"] li', originalTitle)
+      .find('[data-testid^="edit-note-"]')
+      .click();
 
     cy.get('[data-testid="note-edit-title"]').clear().type("Saved title");
     cy.get('[data-testid="note-edit-save"]').click();
 
-    cy.contains(".note-card__title", "Saved title").should("be.visible");
+    cy.contains('[data-testid="note-list"] li', "Saved title").should(
+      "be.visible",
+    );
 
-    cy.contains("li", "Saved title").within(() => {
-      cy.get('[data-testid="edit-note-seed-note-1"]').click();
-    });
+    cy.contains('[data-testid="note-list"] li', "Saved title")
+      .find('[data-testid^="edit-note-"]')
+      .click();
 
     cy.get('[data-testid="note-edit-title"]').clear().type("Discarded title");
     cy.get('[data-testid="note-edit-cancel"]').click();
 
-    cy.contains(".note-card__title", "Saved title").should("be.visible");
-    cy.contains(".note-card__title", "Discarded title").should("not.exist");
+    cy.contains('[data-testid="note-list"] li', "Saved title").should(
+      "be.visible",
+    );
+    cy.contains('[data-testid="note-list"] li', "Discarded title").should(
+      "not.exist",
+    );
   });
 });

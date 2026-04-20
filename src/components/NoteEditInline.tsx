@@ -1,5 +1,12 @@
-import { useEffect, useId, useRef, useState } from "react";
-import type { Note } from "@/store/notesStore";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from "react";
+import type { Note } from "@/types/note";
+import styles from "./NoteEditInline.module.css";
 
 export type NoteEditInlineProps = {
   note: Note;
@@ -31,7 +38,13 @@ export function NoteEditInline({ note, onSave, onCancel }: NoteEditInlineProps) 
   };
 
   const handleSave = () => {
-    onSave({ title: title.trim(), body });
+    const trimmed = title.trim();
+    if (!trimmed) {
+      announce("Title is required. Enter a title before saving.");
+      titleRef.current?.focus();
+      return;
+    }
+    onSave({ title: trimmed, body });
     announce("Note saved.");
   };
 
@@ -42,7 +55,7 @@ export function NoteEditInline({ note, onSave, onCancel }: NoteEditInlineProps) 
     onCancel();
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Escape") {
       e.preventDefault();
       handleCancel();
@@ -64,59 +77,70 @@ export function NoteEditInline({ note, onSave, onCancel }: NoteEditInlineProps) 
 
   return (
     <div
-      className="note-edit-inline"
+      className={styles.card}
+      data-testid="note-edit-inline"
       role="group"
       aria-labelledby={groupLabelId}
-      onKeyDown={handleKeyDown}
+      onKeyDown={onKeyDown}
     >
-      <h2 id={groupLabelId} className="sr-only">
+      <h2 id={groupLabelId} className={styles.srOnly}>
         Edit note
       </h2>
-      <div className="sr-only" aria-live="polite" aria-atomic="true">
+      <div className={styles.srOnly} aria-live="polite" aria-atomic="true">
         {statusMessage}
       </div>
-      <label htmlFor={titleId} className="sr-only">
-        Note title
-      </label>
-      <input
-        ref={titleRef}
-        id={titleId}
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        aria-label="Note title"
-        data-testid="note-edit-title"
-        className="note-edit-inline__title"
-      />
-      <label htmlFor={bodyId} className="sr-only">
-        Note body
-      </label>
-      <textarea
-        id={bodyId}
-        value={body}
-        onChange={(e) => setBody(e.target.value)}
-        aria-label="Note body"
-        data-testid="note-edit-body"
-        rows={4}
-        className="note-edit-inline__body"
-      />
-      <div className="note-edit-inline__actions">
-        <button
-          type="button"
-          onClick={handleSave}
-          aria-label="Save note changes"
-          data-testid="note-edit-save"
-        >
-          Save
-        </button>
-        <button
-          type="button"
-          onClick={handleCancel}
-          aria-label="Cancel editing note"
-          data-testid="note-edit-cancel"
-        >
-          Cancel
-        </button>
+      <div className={styles.editForm}>
+        <div className={styles.field}>
+          <label htmlFor={titleId} className={styles.label}>
+            Title
+          </label>
+          <input
+            ref={titleRef}
+            id={titleId}
+            type="text"
+            className={styles.input}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            aria-label="Note title"
+            data-testid="note-edit-title"
+            autoComplete="off"
+          />
+        </div>
+        <div className={styles.field}>
+          <label htmlFor={bodyId} className={styles.label}>
+            Body
+          </label>
+          <textarea
+            id={bodyId}
+            className={styles.textarea}
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            aria-label="Note body"
+            data-testid="note-edit-body"
+            autoComplete="off"
+            rows={5}
+          />
+        </div>
+        <div className={styles.actions}>
+          <button
+            type="button"
+            className={styles.secondary}
+            onClick={handleCancel}
+            aria-label="Cancel editing note"
+            data-testid="note-edit-cancel"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className={styles.primary}
+            onClick={handleSave}
+            aria-label="Save note changes"
+            data-testid="note-edit-save"
+          >
+            Save
+          </button>
+        </div>
       </div>
     </div>
   );
