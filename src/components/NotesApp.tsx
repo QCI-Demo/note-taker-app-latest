@@ -1,8 +1,10 @@
-import { useState, type CSSProperties } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { CreateNoteModal } from "@/components/CreateNoteModal";
 import { NoteListItem } from "@/components/NoteListItem";
+import { NoteSearchBar } from "@/components/NoteSearchBar";
 import { tokens } from "@/design/tokens";
 import { useNotesStore } from "@/stores/notesStore";
+import { filterNotesByQuery } from "@/utils/filterNotes";
 import styles from "./NotesApp.module.css";
 
 const tokenStyle: CSSProperties = {
@@ -35,7 +37,20 @@ const tokenStyle: CSSProperties = {
 export function NotesApp() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const notes = useNotesStore((s) => s.notes);
+
+  const visibleNotes = useMemo(
+    () => filterNotesByQuery(notes, searchQuery),
+    [notes, searchQuery],
+  );
+
+  const hasNotes = notes.length > 0;
+  const trimmedQuery = searchQuery.trim();
+  const emptyMessage =
+    hasNotes && trimmedQuery && visibleNotes.length === 0
+      ? "No notes match your search."
+      : null;
 
   return (
     <div className={styles.app} style={tokenStyle}>
@@ -51,12 +66,20 @@ export function NotesApp() {
         </button>
       </header>
 
+      {hasNotes ? (
+        <NoteSearchBar onDebouncedChange={setSearchQuery} />
+      ) : null}
+
       <main className={styles.main}>
-        {notes.length === 0 ? (
+        {!hasNotes ? (
           <p className={styles.empty}>No notes yet. Add your first note.</p>
+        ) : emptyMessage ? (
+          <p className={styles.empty} data-testid="note-search-empty">
+            {emptyMessage}
+          </p>
         ) : (
           <ul className={styles.list} data-testid="note-list" aria-label="Notes">
-            {notes.map((note) => (
+            {visibleNotes.map((note) => (
               <li
                 key={note.id}
                 className={styles.listItem}
