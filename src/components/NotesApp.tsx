@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { CreateNoteModal } from "@/components/CreateNoteModal";
 import { NoteListItem } from "@/components/NoteListItem";
 import { NoteSearchBar } from "@/components/NoteSearchBar";
@@ -39,6 +39,11 @@ export function NotesApp() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const notes = useNotesStore((s) => s.notes);
+  const hydrate = useNotesStore((s) => s.hydrate);
+
+  useEffect(() => {
+    void hydrate();
+  }, [hydrate]);
 
   const visibleNotes = useMemo(
     () => filterNotesByQuery(notes, searchQuery),

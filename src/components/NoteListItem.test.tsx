@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NoteListItem } from "@/components/NoteListItem";
+import { resetNotesStoreAndDb } from "@/test/resetNotesStore";
 import { useNotesStore } from "@/stores/notesStore";
 import type { Note } from "@/models/Note";
 
@@ -12,8 +13,8 @@ const sampleNote: Note = {
   updatedAt: new Date("2026-01-01T00:00:00.000Z"),
 };
 
-beforeEach(() => {
-  useNotesStore.setState({ notes: [sampleNote] });
+beforeEach(async () => {
+  await resetNotesStoreAndDb([sampleNote]);
 });
 
 describe("NoteListItem delete", () => {

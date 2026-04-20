@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { NotesApp } from "@/components/NotesApp";
-import { useNotesStore } from "@/stores/notesStore";
+import { resetNotesStoreAndDb } from "@/test/resetNotesStore";
 import type { Note } from "@/models/Note";
 
 const fixedDate = new Date("2026-01-01T00:00:00.000Z");
@@ -16,9 +16,9 @@ function makeNotes(count: number): Note[] {
 }
 
 describe("Note search (debounced filter)", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    await resetNotesStoreAndDb(makeNotes(100));
     jest.useFakeTimers();
-    useNotesStore.setState({ notes: makeNotes(100) });
   });
 
   afterEach(() => {

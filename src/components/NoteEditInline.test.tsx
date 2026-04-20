@@ -2,6 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NotesApp } from "@/components/NotesApp";
 import { NoteEditInline } from "@/components/NoteEditInline";
+import { resetNotesStoreAndDb } from "@/test/resetNotesStore";
 import { useNotesStore } from "@/stores/notesStore";
 import type { Note } from "@/models/Note";
 
@@ -14,8 +15,8 @@ const sampleNote: Note = {
 };
 
 describe("NoteEditInline", () => {
-  beforeEach(() => {
-    useNotesStore.setState({ notes: [sampleNote] });
+  beforeEach(async () => {
+    await resetNotesStoreAndDb([sampleNote]);
   });
 
   it("renders title and body fields for the note", () => {

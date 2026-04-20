@@ -10,7 +10,9 @@ import styles from "./NoteEditInline.module.css";
 
 export type NoteEditInlineProps = {
   note: Note;
-  onSave: (updated: Pick<Note, "title" | "body">) => void;
+  onSave: (
+    updated: Pick<Note, "title" | "body">,
+  ) => void | Promise<void>;
   onCancel: () => void;
 };
 

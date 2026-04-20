@@ -6,7 +6,6 @@ import "fake-indexeddb/auto";
 
 import { performance } from "node:perf_hooks";
 
-import type { Note } from "../src/models/Note";
 import { createNote, getNotes, db } from "../src/storage/IndexedDBService";
 
 const BUDGET_MS = 100;
@@ -16,31 +15,23 @@ function randomText(len: number): string {
   const chars =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
   let out = "";
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < len; i += 1) {
     out += chars[Math.floor(Math.random() * chars.length)];
   }
   return out;
-}
-
-function makeNote(i: number): Note {
-  const t = new Date(Date.UTC(2026, 0, 1, 0, 0, i));
-  return {
-    id: globalThis.crypto.randomUUID(),
-    title: `Bench ${i} ${randomText(12)}`,
-    body: randomText(80),
-    createdAt: t,
-    updatedAt: t,
-  };
 }
 
 async function main(): Promise<void> {
   await db.delete();
   await db.open();
 
-  const notes = Array.from({ length: COUNT }, (_, i) => makeNote(i));
-
   const insertStart = performance.now();
-  await Promise.all(notes.map((n) => createNote(n)));
+  for (let i = 0; i < COUNT; i += 1) {
+    await createNote({
+      title: `Bench ${i} ${randomText(12)}`,
+      body: randomText(80),
+    });
+  }
   const insertMs = performance.now() - insertStart;
 
   const readStart = performance.now();

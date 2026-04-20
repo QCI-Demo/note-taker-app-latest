@@ -9,8 +9,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
+    "cypress:ci": "start-server-and-test dev http://127.0.0.1:5173 cypress:run",
     "benchmark": "tsx --tsconfig tsconfig.scripts.json scripts/benchmark.ts"
   },
   "dependencies": {
@@ -38,6 +40,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "start-server-and-test": "^2.1.5",
     "ts-jest": "^29.3.0",
     "tsx": "^4.21.0",
     "typescript": "~5.7.2",
