@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { NoteEditInline } from "@/components/NoteEditInline";
-import type { Note } from "@/types/note";
+import type { Note } from "@/models/Note";
 import { useNotesStore } from "@/stores/notesStore";
 import styles from "./NotesApp.module.css";
 

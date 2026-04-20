@@ -2,14 +2,14 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NoteListItem } from "@/components/NoteListItem";
 import { useNotesStore } from "@/stores/notesStore";
-import type { Note } from "@/types/note";
+import type { Note } from "@/models/Note";
 
 const sampleNote: Note = {
   id: "note-to-delete",
   title: "Deletable note",
   body: "Some body",
-  createdAt: "2026-01-01T00:00:00.000Z",
-  updatedAt: "2026-01-01T00:00:00.000Z",
+  createdAt: new Date("2026-01-01T00:00:00.000Z"),
+  updatedAt: new Date("2026-01-01T00:00:00.000Z"),
 };
 
 beforeEach(() => {

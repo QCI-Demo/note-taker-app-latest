@@ -1,15 +1,17 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { NotesApp } from "@/components/NotesApp";
 import { useNotesStore } from "@/stores/notesStore";
-import type { Note } from "@/types/note";
+import type { Note } from "@/models/Note";
+
+const fixedDate = new Date("2026-01-01T00:00:00.000Z");
 
 function makeNotes(count: number): Note[] {
   return Array.from({ length: count }, (_, i) => ({
     id: `n-${i}`,
     title: `Note ${i}`,
     body: i % 10 === 0 ? `special-token-${i}` : `Body for ${i}`,
-    createdAt: "2026-01-01T00:00:00.000Z",
-    updatedAt: "2026-01-01T00:00:00.000Z",
+    createdAt: fixedDate,
+    updatedAt: fixedDate,
   }));
 }
 

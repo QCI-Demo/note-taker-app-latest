@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Note } from "@/types/note";
+import type { Note } from "@/models/Note";
 
 function newNoteId(): string {
   if (typeof globalThis.crypto?.randomUUID === "function") {
@@ -22,7 +22,7 @@ export const useNotesStore = create<NotesState>((set) => ({
   notes: [],
   addNote: (payload) =>
     set((state) => {
-      const now = new Date().toISOString();
+      const now = new Date();
       const note: Note = {
         id: newNoteId(),
         title: payload.title.trim(),
@@ -38,7 +38,7 @@ export const useNotesStore = create<NotesState>((set) => ({
       if (index === -1) {
         return state;
       }
-      const now = new Date().toISOString();
+      const now = new Date();
       const previous = state.notes[index];
       const nextNotes = [...state.notes];
       nextNotes[index] = {

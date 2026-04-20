@@ -5,7 +5,7 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
-import type { Note } from "@/types/note";
+import type { Note } from "@/models/Note";
 import styles from "./NoteEditInline.module.css";
 
 export type NoteEditInlineProps = {

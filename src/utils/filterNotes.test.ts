@@ -1,11 +1,13 @@
 import { filterNotesByQuery } from "@/utils/filterNotes";
-import type { Note } from "@/types/note";
+import type { Note } from "@/models/Note";
+
+const fixedDate = new Date("2026-01-01T00:00:00.000Z");
 
 const base: Omit<Note, "id"> = {
   title: "",
   body: "",
-  createdAt: "2026-01-01T00:00:00.000Z",
-  updatedAt: "2026-01-01T00:00:00.000Z",
+  createdAt: fixedDate,
+  updatedAt: fixedDate,
 };
 
 function makeNote(id: string, title: string, body: string): Note {
