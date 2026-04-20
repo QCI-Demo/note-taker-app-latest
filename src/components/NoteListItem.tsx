@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { NoteEditInline } from "@/components/NoteEditInline";
-import type { Note } from "@/types/note";
+import type { Note } from "@/models/Note";
 import { useNotesStore } from "@/stores/notesStore";
 import styles from "./NotesApp.module.css";
 
@@ -26,8 +26,8 @@ export function NoteListItem({
     return (
       <NoteEditInline
         note={note}
-        onSave={(updated) => {
-          updateNote(note.id, updated);
+        onSave={async (updated) => {
+          await updateNote(note.id, updated);
           onEditingChange(null);
         }}
         onCancel={() => onEditingChange(null)}
@@ -69,8 +69,8 @@ export function NoteListItem({
         isOpen={confirmOpen}
         message={message}
         onCancel={() => setConfirmOpen(false)}
-        onConfirm={() => {
-          deleteNote(note.id);
+        onConfirm={async () => {
+          await deleteNote(note.id);
           setConfirmOpen(false);
         }}
       />

@@ -1,4 +1,4 @@
-import type { Note } from "@/types/note";
+import type { Note } from "@/models/Note";
 
 /** Case-insensitive match on title or body (trimmed query). */
 export function filterNotesByQuery(notes: Note[], query: string): Note[] {

@@ -114,8 +114,8 @@ export function CreateNoteModal({
     return null;
   }
 
-  const onSubmit = handleSubmit((values) => {
-    addNote({
+  const onSubmit = handleSubmit(async (values) => {
+    await addNote({
       title: values.title.trim(),
       body: values.body,
     });

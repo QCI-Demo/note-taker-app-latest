@@ -2,20 +2,21 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NotesApp } from "@/components/NotesApp";
 import { NoteEditInline } from "@/components/NoteEditInline";
+import { resetNotesStoreAndDb } from "@/test/resetNotesStore";
 import { useNotesStore } from "@/stores/notesStore";
-import type { Note } from "@/types/note";
+import type { Note } from "@/models/Note";
 
 const sampleNote: Note = {
   id: "test-note-1",
   title: "Original title",
   body: "Original body",
-  createdAt: "2026-01-01T00:00:00.000Z",
-  updatedAt: "2026-01-01T00:00:00.000Z",
+  createdAt: new Date("2026-01-01T00:00:00.000Z"),
+  updatedAt: new Date("2026-01-01T00:00:00.000Z"),
 };
 
 describe("NoteEditInline", () => {
-  beforeEach(() => {
-    useNotesStore.setState({ notes: [sampleNote] });
+  beforeEach(async () => {
+    await resetNotesStoreAndDb([sampleNote]);
   });
 
   it("renders title and body fields for the note", () => {

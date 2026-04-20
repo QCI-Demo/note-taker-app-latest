@@ -1,10 +1,11 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { CreateNoteModal } from "@/components/CreateNoteModal";
+import { resetNotesStoreAndDb } from "@/test/resetNotesStore";
 import { useNotesStore } from "@/stores/notesStore";
 
-beforeEach(() => {
-  useNotesStore.setState({ notes: [] });
+beforeEach(async () => {
+  await resetNotesStoreAndDb([]);
 });
 
 describe("CreateNoteModal", () => {

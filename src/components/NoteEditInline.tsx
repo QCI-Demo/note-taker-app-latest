@@ -5,12 +5,14 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
-import type { Note } from "@/types/note";
+import type { Note } from "@/models/Note";
 import styles from "./NoteEditInline.module.css";
 
 export type NoteEditInlineProps = {
   note: Note;
-  onSave: (updated: Pick<Note, "title" | "body">) => void;
+  onSave: (
+    updated: Pick<Note, "title" | "body">,
+  ) => void | Promise<void>;
   onCancel: () => void;
 };
 

@@ -1,22 +1,24 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { NotesApp } from "@/components/NotesApp";
-import { useNotesStore } from "@/stores/notesStore";
-import type { Note } from "@/types/note";
+import { resetNotesStoreAndDb } from "@/test/resetNotesStore";
+import type { Note } from "@/models/Note";
+
+const fixedDate = new Date("2026-01-01T00:00:00.000Z");
 
 function makeNotes(count: number): Note[] {
   return Array.from({ length: count }, (_, i) => ({
     id: `n-${i}`,
     title: `Note ${i}`,
     body: i % 10 === 0 ? `special-token-${i}` : `Body for ${i}`,
-    createdAt: "2026-01-01T00:00:00.000Z",
-    updatedAt: "2026-01-01T00:00:00.000Z",
+    createdAt: fixedDate,
+    updatedAt: fixedDate,
   }));
 }
 
 describe("Note search (debounced filter)", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    await resetNotesStoreAndDb(makeNotes(100));
     jest.useFakeTimers();
-    useNotesStore.setState({ notes: makeNotes(100) });
   });
 
   afterEach(() => {
