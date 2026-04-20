@@ -15,6 +15,7 @@ interface NotesState {
     id: string,
     updates: Partial<Pick<Note, "title" | "body">>,
   ) => void;
+  deleteNote: (id: string) => void;
 }
 
 export const useNotesStore = create<NotesState>((set) => ({
@@ -49,4 +50,8 @@ export const useNotesStore = create<NotesState>((set) => ({
       };
       return { notes: nextNotes };
     }),
+  deleteNote: (id) =>
+    set((state) => ({
+      notes: state.notes.filter((n) => n.id !== id),
+    })),
 }));

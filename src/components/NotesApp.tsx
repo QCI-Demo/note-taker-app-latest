@@ -1,6 +1,6 @@
 import { useState, type CSSProperties } from "react";
 import { CreateNoteModal } from "@/components/CreateNoteModal";
-import { NoteEditInline } from "@/components/NoteEditInline";
+import { NoteListItem } from "@/components/NoteListItem";
 import { tokens } from "@/design/tokens";
 import { useNotesStore } from "@/stores/notesStore";
 import styles from "./NotesApp.module.css";
@@ -36,7 +36,6 @@ export function NotesApp() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const notes = useNotesStore((s) => s.notes);
-  const updateNote = useNotesStore((s) => s.updateNote);
 
   return (
     <div className={styles.app} style={tokenStyle}>
@@ -63,34 +62,11 @@ export function NotesApp() {
                 className={styles.listItem}
                 data-note-id={note.id}
               >
-                {editingId === note.id ? (
-                  <NoteEditInline
-                    note={note}
-                    onSave={(updated) => {
-                      updateNote(note.id, updated);
-                      setEditingId(null);
-                    }}
-                    onCancel={() => setEditingId(null)}
-                  />
-                ) : (
-                  <div className={styles.noteRow}>
-                    <div className={styles.noteContent}>
-                      <span className={styles.noteTitle}>{note.title}</span>
-                      {note.body ? (
-                        <span className={styles.notePreview}>{note.body}</span>
-                      ) : null}
-                    </div>
-                    <button
-                      type="button"
-                      className={styles.iconButton}
-                      data-testid={`edit-note-${note.id}`}
-                      aria-label={`Edit note: ${note.title}`}
-                      onClick={() => setEditingId(note.id)}
-                    >
-                      ✎
-                    </button>
-                  </div>
-                )}
+                <NoteListItem
+                  note={note}
+                  isEditing={editingId === note.id}
+                  onEditingChange={setEditingId}
+                />
               </li>
             ))}
           </ul>
