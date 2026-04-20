@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from "react";
 import { CreateNoteModal } from "@/components/CreateNoteModal";
+import { NoteEditInline } from "@/components/NoteEditInline";
 import { tokens } from "@/design/tokens";
 import { useNotesStore } from "@/stores/notesStore";
 import styles from "./NotesApp.module.css";
@@ -34,6 +35,7 @@ const tokenStyle: CSSProperties = {
 export function NotesApp() {
   const [modalOpen, setModalOpen] = useState(false);
   const notes = useNotesStore((s) => s.notes);
+  const updateNote = useNotesStore((s) => s.updateNote);
 
   return (
     <div className={styles.app} style={tokenStyle}>
@@ -56,10 +58,13 @@ export function NotesApp() {
           <ul className={styles.list} data-testid="note-list" aria-label="Notes">
             {notes.map((note) => (
               <li key={note.id} className={styles.listItem}>
-                <span className={styles.noteTitle}>{note.title}</span>
-                {note.body ? (
-                  <span className={styles.notePreview}>{note.body}</span>
-                ) : null}
+                <NoteEditInline
+                  note={note}
+                  onSave={(title, body) => {
+                    updateNote(note.id, { title, body });
+                  }}
+                  onCancel={() => {}}
+                />
               </li>
             ))}
           </ul>

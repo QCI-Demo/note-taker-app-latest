@@ -11,6 +11,10 @@ function newNoteId(): string {
 interface NotesState {
   notes: Note[];
   addNote: (note: Omit<Note, "id" | "createdAt" | "updatedAt">) => void;
+  updateNote: (
+    id: string,
+    updates: Partial<Pick<Note, "title" | "body">>,
+  ) => void;
 }
 
 export const useNotesStore = create<NotesState>((set) => ({
@@ -26,5 +30,23 @@ export const useNotesStore = create<NotesState>((set) => ({
         updatedAt: now,
       };
       return { notes: [note, ...state.notes] };
+    }),
+  updateNote: (id, updates) =>
+    set((state) => {
+      const index = state.notes.findIndex((n) => n.id === id);
+      if (index === -1) {
+        return state;
+      }
+      const now = new Date().toISOString();
+      const previous = state.notes[index];
+      const nextNotes = [...state.notes];
+      nextNotes[index] = {
+        ...previous,
+        title:
+          updates.title !== undefined ? updates.title.trim() : previous.title,
+        body: updates.body !== undefined ? updates.body : previous.body,
+        updatedAt: now,
+      };
+      return { notes: nextNotes };
     }),
 }));

@@ -72,16 +72,3 @@
   border: 1px solid var(--color-border);
   background-color: var(--color-surface);
 }
-
-.noteTitle {
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-md);
-}
-
-.notePreview {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
