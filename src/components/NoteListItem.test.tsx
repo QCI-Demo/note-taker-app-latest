@@ -19,7 +19,13 @@ beforeEach(() => {
 describe("NoteListItem delete", () => {
   it("opens confirmation dialog when delete is clicked", async () => {
     const user = userEvent.setup();
-    render(<NoteListItem note={sampleNote} />);
+    render(
+      <NoteListItem
+        note={sampleNote}
+        isEditing={false}
+        onEditingChange={jest.fn()}
+      />,
+    );
 
     await user.click(screen.getByRole("button", { name: "Delete note" }));
 
@@ -33,7 +39,13 @@ describe("NoteListItem delete", () => {
     const user = userEvent.setup();
     const deleteNote = jest.spyOn(useNotesStore.getState(), "deleteNote");
 
-    render(<NoteListItem note={sampleNote} />);
+    render(
+      <NoteListItem
+        note={sampleNote}
+        isEditing={false}
+        onEditingChange={jest.fn()}
+      />,
+    );
 
     await user.click(screen.getByRole("button", { name: "Delete note" }));
     await user.click(screen.getByTestId("confirm-dialog-confirm"));
@@ -46,7 +58,13 @@ describe("NoteListItem delete", () => {
 
   it("closes dialog without deleting when cancel is clicked", async () => {
     const user = userEvent.setup();
-    render(<NoteListItem note={sampleNote} />);
+    render(
+      <NoteListItem
+        note={sampleNote}
+        isEditing={false}
+        onEditingChange={jest.fn()}
+      />,
+    );
 
     await user.click(screen.getByRole("button", { name: "Delete note" }));
     await user.click(screen.getByTestId("confirm-dialog-cancel"));
@@ -57,7 +75,13 @@ describe("NoteListItem delete", () => {
 
   it("traps focus inside the dialog while open", async () => {
     const user = userEvent.setup();
-    render(<NoteListItem note={sampleNote} />);
+    render(
+      <NoteListItem
+        note={sampleNote}
+        isEditing={false}
+        onEditingChange={jest.fn()}
+      />,
+    );
 
     await user.click(screen.getByRole("button", { name: "Delete note" }));
 
